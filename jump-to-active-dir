@@ -1,0 +1,20 @@
+#!/bin/bash
+
+## fzf cwd jump: Extracts all paths where bash and vim.nox is running in
+
+__pid_cwd() {
+	mapfile -t pids < <(pgrep -x -f -- bash ; pgrep -x -f -- -bash ; pgrep vim.nox)
+	# mapfile -t pids < <(pgrep bash ; pgrep vim.nox)
+	for pid in "${pids[@]}"; do
+		readlink "/proc/$pid/cwd"
+	done | grep -v '(deleted)$' | sort -u
+}
+__fzf_cwd_jump__() {
+	printf 'cd %q' \
+		"$(__pid_cwd | fzf --height 40% --inline-info --no-sort --reverse)"
+}
+
+{
+	# shellcheck disable=2016
+	bind '"\C-g\C-g": " \C-b\C-k \C-u$(__fzf_cwd_jump__)\e\C-e\er\C-m\C-y\C-h\e \C-y\ey\C-x\C-x\C-d"';
+}
