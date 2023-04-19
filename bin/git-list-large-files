@@ -1,9 +1,8 @@
 #!/bin/bash
-
-# This file is NOT covered by the repositorys LICENSE file.
-#
-# Author: raphinesse
-# Source: https://stackoverflow.com/questions/10622179/how-to-find-identify-large-commits-in-git-history/42544963#42544963
+# "A blazingly fast shell one-liner" / raphinesse
+# https://stackoverflow.com/questions/10622179/how-to-find-identify-large-commits-in-git-history/42544963#42544963
+# revision: https://stackoverflow.com/revisions/42544963/25
+# CC BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/
 
 git rev-list --objects --all |
 	git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' |
