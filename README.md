@@ -12,3 +12,7 @@ navigate to the current directory when I needed an auxilliary shell to work in.
 Similar in fashion to `go-where-you-were` this adds a quick jump via fzf to any
 working directory for all bash processes or instances of vim.
 
+## autojump-fzf
+
+Simple function to use [autojump](https://github.com/wting/autojump.git) with
+[fzf](https://github.com/junegunn/fzf).

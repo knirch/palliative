@@ -1,0 +1,14 @@
+#!/bin/bash
+
+__fzf_autojump__() {
+	autojump --purge >/dev/null
+	if [[ "$#" -ne 0 ]]; then
+		cd "$(autojump "$@")" || return 1
+		return
+	fi
+	printf 'cd %q' \
+		"$(sort -k1gr "$HOME/.local/share/autojump/autojump.txt" | awk '{$1=""; print substr($0,2)}' | fzf --height 40% --inline-info --no-sort --reverse)"
+}
+
+# Stolen from ALT-C implementation.
+bind '"\C-g\C-j": " \C-b\C-k \C-u$(__fzf_autojump__)\e\C-e\er\C-m\C-y\C-h\e \C-y\ey\C-x\C-x\C-d"'
