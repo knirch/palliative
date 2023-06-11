@@ -1,0 +1,45 @@
+#!/bin/bash
+
+prepend=no
+if [[ $1 == -p ]]; then
+	shift
+	prepend=yes
+fi
+
+IFS=: read -a oldpath <<<"$PATH"
+
+if [[ $prepend == yes ]]; then
+	path=()
+	for new; do
+		path+=("$new")
+	done
+
+	for p in "${oldpath[@]}"; do
+		found=no
+		for new; do
+			if [[ $(readlink -f "$new") == $(readlink -f "$p") ]]; then
+				found=yes
+				break
+			fi
+		done
+		if [[ $found == no ]]; then
+			path+=("$p")
+		fi
+	done
+else
+	path=("${oldpath[@]}")
+	for new; do
+		found=no
+		for p in "${oldpath[@]}"; do
+			if [[ $(readlink -f "$new") == $(readlink -f "$p") ]]; then
+				found=yes
+				break
+			fi
+		done
+		if [[ $found == no ]]; then
+			path+=("$new")
+		fi
+	done
+fi
+
+IFS=: ; echo "${path[*]}"
