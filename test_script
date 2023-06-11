@@ -1,0 +1,25 @@
+#!/bin/bash
+for x in crlf lf native; do
+for y in true false warn; do
+for z in true false input; do
+cp ../SOURCE "$x.$y.$z.klc"
+{
+	git config core.eol $x
+	git config core.safecrlf $y
+	git config core.autocrlf $z
+	git add $x.$y.$z.klc ; git commit -m $x.$y.$z.klc
+} &>/dev/null
+git rebase --root &>/dev/null || echo REBASE FAIL
+echo core.eol $x core.safecrlf $y core.autocrlf $z
+echo "  $(file altgr-intl-knirch.klc)"
+echo "  $(file $x.$y.$z.klc)"
+echo "  $(file qmk/run)"
+git status --porcelain
+{
+	git reset --hard b510edc
+	git clean -fxd
+} &>/dev/null
+echo
+done
+done
+done
